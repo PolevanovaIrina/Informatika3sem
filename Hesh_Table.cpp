@@ -10,49 +10,46 @@
 
 struct HESH_TABLE
 {
-	std::list<std::string> *arr = new std::list<std::string>[0];
+	std::list<std::string> *arr = new std::list<std::string>[1000000];
 
-	HESH_TABLE(int k)
+	int hesh_Function(std::string name, int count)
 	{
-		std::list<std::string> *arr1 = new std::list<std::string>[k];
-		this->arr = arr1;
-
-	}
-
-	int hesh_Function(std::string name)
-	{
+		
 		int len = name.length();
 		int i = 0;
 		int sum = 0;
 
 		while (i < len) {
 			sum = sum + (int)name[i];
+			i++;
 		};
-		int number = sum % 100;
+		int number = abs(sum % (count-1));
 		return number;
+		
 	}
 
-	void fill_Book(std::string name)
+	void fill_Book(std::string name,int count)
 	{
-		int number = hesh_Function(name);
-		(arr[number]).push_front(name);
+	
+		int number = hesh_Function(name, count);
+		(arr[number]).push_back(name);
 
 	}
 
-	bool find_Book(std::string name)
+	void find_Book(std::string name)
 	{
 		int number = hesh_Function(name);
-		bool answer = false;
 
-		std::list<std::string>::iterator ptr;
-		for (ptr = arr[number].begin(); ptr != arr[number].end(); ptr++)
-		{
-			if (*ptr == name) {
-				answer = true;
-			}
+		std::list<std::string>::iterator iter = std::find((arr[number]).begin(), (arr[number]).end(),name);
+
+		if (iter != (arr[number]).end()) {
+			std::cout << "book is here" << "\n";
 		}
+		else {
+			std::cout << "book is not here" << "\n";
+		}
+		
 
-		return answer;
 
 	}
 
@@ -69,13 +66,13 @@ struct HESH_TABLE
 			}
 
 		}
-
+		std::cout << "ia ydolyay knigi";
 	}
 
-	void show_Distribution()
+	void show_Distribution(int count)
 	{
 
-		for (int i = 0; i <= 99; i++) {
+		for (int i = 0; i <= count-1; i++) {
 			int k = 0;
 			std::list<std::string>::iterator ptr;
 			for (ptr = arr[i].begin(); ptr != arr[i].end(); ptr++)
@@ -98,26 +95,25 @@ struct HESH_TABLE
 int main()
 {
 	int count;
+	setlocale(LC_ALL, "Russian");
+
+	HESH_TABLE one;
+	std::cout << "Сколько ячеек хотите использовать?" << "\n";
 	std::cin >> count;
-	HESH_TABLE one = HESH_TABLE(count);
 
 	std::ifstream fin;
 	fin.open("words.txt");
-	std::vector<std::string> buffer;
-	int CountOfatients = 0;
+
 	while (fin) {
 
-		std::vector<std::string> elements;
 		std::string item;
 
-
 		std::getline(fin, item);
-		elements.push_back(item);
-		one.fill_Book(item);
+		one.fill_Book(item,count);
 
-
-
-
+	
 	}
 	fin.close();
+	//one.find_Book("объяснение1");
+	one.show_Distribution(count);
 }
