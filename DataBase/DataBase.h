@@ -20,6 +20,7 @@ struct DataBase
  private:
 	List<Patients> ListOfPatients;
 	int patientscount = 0;
+	
 public:
 	void getInfo(int id);
 	void copyBase(DataBase* copy);
@@ -28,7 +29,8 @@ public:
 	void saveDataBase(std::string filename);
 	void deletePatient(int id);
 	void addPatient(std::string name, std::string surname, std::string  sex, std::string age, std::string city, std::string visitcount);
-
+	void sortByAge(int n);
+	void findPatient(std::string name = "-1", std::string surname = "-1", std::string  sex = "-1", std::string age = "-1", std::string city = "-1", std::string visitcount = "-1");
 };
 
 
