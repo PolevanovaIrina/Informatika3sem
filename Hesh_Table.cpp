@@ -8,11 +8,13 @@
 #include <vector>
 
 
+
 struct HESH_TABLE
 {
 	std::list<std::string> *arr = new std::list<std::string>[1000000];
+	int count;
 
-	int hesh_Function(std::string name, int count)
+	int hesh_Function(std::string name)
 	{
 		
 		int len = name.length();
@@ -28,10 +30,21 @@ struct HESH_TABLE
 		
 	}
 
-	void fill_Book(std::string name,int count)
+	int hesh_Function1(std::string name)
+	{
+		int seed = 131;
+		unsigned long hash = 0;
+		for (int i = 0; i < name.length(); i++)
+		{
+			hash = (hash * seed) + name[i];
+		}
+		return hash % (count-1);
+	}
+
+	void fill_Book(std::string name)
 	{
 	
-		int number = hesh_Function(name, count);
+		int number = hesh_Function(name);
 		(arr[number]).push_back(name);
 
 	}
@@ -48,8 +61,6 @@ struct HESH_TABLE
 		else {
 			std::cout << "book is not here" << "\n";
 		}
-		
-
 
 	}
 
@@ -69,20 +80,23 @@ struct HESH_TABLE
 		std::cout << "ia ydolyay knigi";
 	}
 
-	void show_Distribution(int count)
+	void show_Distribution()
 	{
+		std::ofstream fin;
+		fin.open("table.txt");
 
-		for (int i = 0; i <= count-1; i++) {
+		for (int i = 0; i <= count - 1; i++) {
 			int k = 0;
 			std::list<std::string>::iterator ptr;
 			for (ptr = arr[i].begin(); ptr != arr[i].end(); ptr++)
 			{
 				k++;
 			}
-			std::cout << i << " - " << k << "\n";
-		}
-	}
+			fin << k << "\n";
+		};
 
+		fin.close();
+	}
 };
 
 
@@ -100,6 +114,7 @@ int main()
 	HESH_TABLE one;
 	std::cout << "Сколько ячеек хотите использовать?" << "\n";
 	std::cin >> count;
+	one.count = count;
 
 	std::ifstream fin;
 	fin.open("words.txt");
@@ -109,11 +124,11 @@ int main()
 		std::string item;
 
 		std::getline(fin, item);
-		one.fill_Book(item,count);
+
+		one.fill_Book(item);
 
 	
 	}
 	fin.close();
-	//one.find_Book("объяснение1");
-	one.show_Distribution(count);
+	one.show_Distribution();
 }
