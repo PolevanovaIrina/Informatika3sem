@@ -1,10 +1,11 @@
-﻿#pragma once
+#pragma once
 #include "pch.h"
 #include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>
 #include"DataBase.h"
+#include <conio.h>
 
 
 
@@ -104,6 +105,30 @@ void DataBase::saveDataBase(std::string filename)
 		DataBase.close();
 
 	}
+void DataBase::findPatient(std::string name , std::string surname , std::string  sex , std::string age , std::string city , std::string visitcount) {
+	
+	int i;
+	int k = 0;
+	for (i = 1; i <= patientscount; i++) {
+
+		Node<Patients>* address = ListOfPatients.giveAddress(i);
+		if (((address->value.name == name) || (name == "-1")) && \
+			((address->value.surname == surname) || (surname == "-1")) && \
+			((address->value.sex == sex) || (sex == "-1")) && \
+			((address->value.age == age) || (age == "-1")) && \
+			((address->value.city == city) || (city == "-1")) && \
+			((address->value.visitcount == visitcount) || (visitcount == "-1"))) {
+
+			getInfo(i);
+			k = 1;
+			
+		}
+	};
+
+	if (k == 0) {
+		std::cout << "Patient not found" << "\n";
+	};
+}
 
 
 
@@ -114,12 +139,12 @@ int main()
 	
 	db.loadFrom("hi.txt");
 	
-	std::cout << "Press 1 to add a patient,press 2 to display information,press 3 to exit" "\n";
+	std::cout << "Press 1 to add a patient,press 2 to display information,press 3 to find patient,press 5 to exit" "\n";
 
 	int answer = 0;
 	std::cin >> answer;
 
-	while (answer != 3) {
+	while (true) {
 
 		switch (answer)
 
@@ -154,13 +179,32 @@ int main()
 			std::cin >> answer;
 			continue; }
 
-		case 3: {
+		case 5: {
 			break; }
 
 		case 4: {
 			DataBase db2;
 			db.copyBase(&db2); }
 
+		case 3: {
+
+			std::string name = " ";
+			std::string surname = "0";
+			std::string gender = "0";
+			std::string age = "0";
+			std::string city = "0";
+			std::string visitcount = "0";
+
+			std::cout << "Enter through a space name, surname, gender(0 - men, 1 - women), age, city, number of visits," << 
+				"if you don't want enter one of parameters just enret -1" << "\n";
+
+			std::cin >> name;
+			std::cin >> surname >> gender >> age >> city >> visitcount;
+
+
+			db.findPatient(name, surname, gender, age, city, visitcount);
+
+		}
 
 
 		default: std::cout << "Press 1 to add a patient,press 2 to display information,press 3 to exit" "\n";
