@@ -8,15 +8,15 @@
 #include <vector>
 
 
-
+template <typename T>
 struct HESH_TABLE
 {
-	std::list<std::string> *arr = new std::list<std::string>[1000000];
+	std::list<T> *arr = new std::list<T>[1000000];
 	int count;
 
-	int hesh_Function(std::string name)
+	int hesh_Function(T variable)
 	{
-		
+		name = variable.to_string();
 		int len = name.length();
 		int i = 0;
 		int sum = 0;
@@ -30,9 +30,9 @@ struct HESH_TABLE
 		
 	}
 
-	int hesh_Function1(std::string name)
+	int hesh_Function1(T variable)
 	{
-		int seed = 131;
+		name = variable.to_string();
 		unsigned long hash = 0;
 		for (int i = 0; i < name.length(); i++)
 		{
@@ -41,15 +41,15 @@ struct HESH_TABLE
 		return hash % (count-1);
 	}
 
-	void fill_Book(std::string name)
+	void fill_Book(T variable)
 	{
 	
-		int number = hesh_Function(name);
+		int number = hesh_Function(variable);
 		(arr[number]).push_back(name);
 
 	}
 
-	void find_Book(std::string name)
+	void find_Book(T name)
 	{
 		int number = hesh_Function(name);
 
@@ -64,7 +64,7 @@ struct HESH_TABLE
 
 	}
 
-	void delete_Book(std::string name)
+	void delete_Book(T name)
 	{
 		int number = hesh_Function(name);
 		bool answer = false;
@@ -87,7 +87,7 @@ struct HESH_TABLE
 
 		for (int i = 0; i <= count - 1; i++) {
 			int k = 0;
-			std::list<std::string>::iterator ptr;
+			std::list<T>::iterator ptr;
 			for (ptr = arr[i].begin(); ptr != arr[i].end(); ptr++)
 			{
 				k++;
@@ -111,7 +111,7 @@ int main()
 	int count;
 	setlocale(LC_ALL, "Russian");
 
-	HESH_TABLE one;
+	HESH_TABLE<std::string> one;
 	std::cout << "Сколько ячеек хотите использовать?" << "\n";
 	std::cin >> count;
 	one.count = count;
